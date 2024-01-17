@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.dao.TimeDao">
+
+    <insert id="insert" parameterType="com.example.entity.Time" >
+        insert into time
+        values (#{id},#{execute_no},#{no},#{datetime},#{before_attendance_state},#{after_attendance_state})
+    </insert>
+    <update id="update">
+        update time
+        <set>
+            <if test="execute_no!=null and execute_no!='' ">
+                execute_no=#{execute_no},
+            </if>
+            <if test="no!=null and no!='' ">
+                no=#{no},
+            </if>
+            <if test="datetime!=null and datetime!='' ">
+                datetime=#{datetime},
+            </if>
+            <if test="before_attendance_state!=null and before_attendance_state!='' ">
+                before_attendance_state=#{before_attendance_state},
+            </if>
+            <if test="after_attendance_state!=null and after_attendance_state!='' ">
+                after_attendance_state=#{after_attendance_state},
+            </if>
+        </set>
+        where id=#{id}
+    </update>
+    <delete id="deletes">
+        delete
+        from time
+        where id in
+        <foreach collection="ids" item="id" separator="," open="(" close=")">
+            #{id}
+        </foreach>
+    </delete>
+    <delete id="deleteDays" parameterType="com.example.entity.Time_day">
+        delete
+        from time
+        <where>
+            <if test="before_datetime!=null and before_datetime!='' ">
+                and datetime <![CDATA[>=]]> #{before_datetime}
+            </if>
+            <if test="after_datetime!=null and after_datetime!='' ">
+                and datetime <![CDATA[<]]> #{after_datetime}
+            </if>
+        </where>
+    </delete>
+
+    <select id="select" resultType="com.example.entity.Time">
+        select *
+        from time
+        <where>
+            <if test="execute_no!=null and execute_no!='' ">
+                and execute_no=#{execute_no}
+            </if>
+            <if test="no!=null and no!='' ">
+                and no=#{no}
+            </if>
+            <if test="before_datetime!=null and before_datetime!='' ">
+                and datetime <![CDATA[>=]]> #{before_datetime}
+            </if>
+            <if test="after_datetime!=null and after_datetime!='' ">
+                and datetime <![CDATA[<]]> #{after_datetime}
+            </if>
+            <if test="before_attendance_state!=null and before_attendance_state!='' ">
+                and before_attendance_state=#{before_attendance_state}
+            </if>
+            <if test="after_attendance_state!=null and after_attendance_state!='' ">
+                and after_attendance_state=#{after_attendance_state}
+            </if>
+        </where>
+    </select>
+</mapper>

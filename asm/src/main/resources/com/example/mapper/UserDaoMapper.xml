@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.dao.UserDao">
+
+<!--    <resultMap id="UserResultMap" type="com.example.entity.User">-->
+<!--        <result column="attendance_state" property="attendanceState"/>-->
+<!--        <result column="role_id" property="roleId"/>-->
+<!--    </resultMap>-->
+
+
+
+    <insert id="insert" parameterType="com.example.entity.User" >
+        insert into user
+        values (#{id},#{no},#{password},#{name},#{sex},#{phone},#{attendance_state},#{post},#{pay},#{role_id})
+    </insert>
+    <update id="update" >
+        update user
+        <set>
+            <if test="no!=null and no!='' ">
+                no=#{no},
+            </if>
+            <if test="password!=null and password!='' ">
+                password=#{password},
+            </if>
+            <if test="name!=null and name!='' ">
+                name=#{name},
+            </if>
+            <if test="sex!=null and sex!='' ">
+                sex=#{sex},
+            </if>
+            <if test="phone!=null and phone!='' ">
+                phone=#{phone},
+            </if>
+            <if test="attendance_state!=null and attendance_state!='' ">
+                attendance_state=#{attendance_state},
+            </if>
+            <if test="post!=null and post!='' ">
+                post=#{post},
+            </if>
+            <if test="pay!=null and pay!=0 ">
+                pay=#{pay},
+            </if>
+            <if test="role_id!=null and role_id!=0 ">
+                role_id=#{role_id},
+            </if>
+        </set>
+        where id=#{id}
+    </update>
+    <delete id="deletes">
+        delete
+        from user
+        where id in
+        <foreach collection="ids" item="id" separator="," open="(" close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+    <select id="select" resultType="com.example.entity.User" parameterType="com.example.entity.User">
+        select *
+        from user
+        <where>
+            <if test="no!=null and no!='' ">
+                and no=#{no}
+            </if>
+            <if test="password!=null and password!='' ">
+                and password=#{password}
+            </if>
+            <if test="name!=null and name!='' ">
+                and name like "%"#{name}"%";
+            </if>
+            <if test="sex!=null and sex!='' ">
+                and sex=#{sex}
+            </if>
+            <if test="phone!=null and phone!='' ">
+                and phone=#{phone}
+            </if>
+            <if test="attendance_state!=null and attendance_state!='' ">
+                and attendance_state=#{attendance_state}
+            </if>
+            <if test="post!=null and post!='' ">
+                and post=#{post}
+            </if>
+            <if test="pay!=null and pay!=0 ">
+                and pay=#{pay}
+            </if>
+            <if test="role_id!=null and role_id!=0 ">
+                and role_id=#{role_id}
+            </if>
+        </where>
+    </select>
+
+</mapper>
